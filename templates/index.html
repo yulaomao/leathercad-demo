@@ -1,0 +1,80 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LeatherCAD V0.16.3</title><link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}"></head>
+<body>
+<div class="shell">
+<header>
+ <div class="brand"><span class="brandmark">LC</span><div><strong>LeatherCAD</strong><small>实物轮廓数字化工作台 · V0.16.3</small></div></div>
+ <div class="headStatus"><span id="saveState">本地处理 · 数据不上传</span><span class="sep"></span><span id="topStatus">就绪</span></div>
+ <div class="headActions"><label class="btn">打开照片<input id="fileInput" type="file" accept="image/*" hidden></label><button id="exportBtn" class="btn primary" disabled>导出 DXF</button></div>
+</header>
+<div class="body">
+ <aside class="rail">
+   <div class="railTitle">工作流程</div>
+   <button class="step active" data-stage="import"><i>1</i><span>导入照片<small>选择待测工件照片</small></span><b>›</b></button>
+   <button class="step" data-stage="calibration"><i>2</i><span>标定检查<small>ArUco 与透视校正</small></span><b>›</b></button>
+   <button class="step" data-stage="mask"><i>3</i><span>分割确认<small>自动 + 人工修正</small></span><b>›</b></button>
+   <button class="step" data-stage="cad"><i>4</i><span>CAD 检查<small>几何拟合与尺寸</small></span><b>›</b></button>
+   <button class="step" data-stage="export"><i>5</i><span>导出<small>DXF · mm</small></span><b>›</b></button>
+   <div class="railHelp"><strong>推荐拍摄</strong><p>材料与标定纸保持共面；尽量俯拍。2 张纸时放在工件对角，4 张最佳。</p></div>
+ </aside>
+
+ <main>
+   <div id="emptyPage" class="page emptyPage">
+     <div class="heroIcon">⌁</div><h1>从一张照片生成可编辑 CAD</h1>
+     <p>支持 1–4 张 ArUco 标定纸，自动恢复毫米尺度、提取轮廓并生成 LINE / ARC / CIRCLE。</p>
+     <label class="btn primary large">选择照片开始<input id="heroInput" type="file" accept="image/*" hidden></label>
+     <div id="dropZone" class="drop">或将 JPG / PNG 拖到这里</div>
+   </div>
+
+   <div id="workPage" class="page hidden">
+    <div class="pageHead"><div><h2 id="pageTitle">标定检查</h2><p id="pageDesc">检查标定识别与透视校正结果</p></div>
+      <div class="viewTabs" id="viewTabs">
+       <button data-view="original">原图</button><button data-view="markers">标记识别</button><button data-view="rectified">俯视校正</button><button data-view="mask">分割</button><button data-view="overlay">轮廓</button><button data-view="cad" class="active">CAD</button>
+      </div>
+    </div>
+    <div class="workArea">
+      <div id="imageStage" class="imageStage hidden"><img id="stageImage"></div>
+      <div id="maskEditor" class="editor hidden">
+       <div class="toolBar"><div class="seg"><button id="partSelect" class="tool">▣ 选择零件 <kbd>0</kbd></button><button id="regionAdd" class="tool active">◎ 点选增加 <kbd>1</kbd></button><button id="regionErase" class="tool">◎ 点选删除 <kbd>2</kbd></button><button id="maskAdd" class="tool">✎ 画笔增加 <kbd>A</kbd></button><button id="maskErase" class="tool">✎ 画笔删除 <kbd>E</kbd></button></div>
+        <label id="brushCtl">画笔 <input id="brushSize" type="range" min="6" max="100" value="30"><span id="brushVal">30</span></label>
+        <span class="grow"></span><button id="maskUndo" class="tool">撤销</button><button id="maskReset" class="tool">恢复自动结果</button></div>
+       <div class="canvasWrap"><canvas id="maskCanvas"></canvas><div id="brushCursor"></div></div>
+      </div>
+      <div id="cadStage" class="editor hidden">
+       <div class="toolBar"><div class="seg"><button id="showFitted" class="tool active">最终实体</button><button id="showCompare" class="tool">叠加对比</button><button id="showRaw" class="tool">原始轮廓</button><button id="controlMode" class="tool">控制点编辑</button><button id="selectMode" class="tool">原始节点</button></div>
+        <span class="grow"></span>
+        <label class="refCtl"><input id="refToggle" type="checkbox" checked> 实物参考</label>
+        <select id="refSource" class="mini"><option value="rectified">校正实物图</option><option value="mask">分割 Mask</option></select>
+        <label class="refCtl">透明度 <input id="refOpacity" type="range" min="0" max="100" value="42"><span id="refOpacityVal">42%</span></label>
+        <label class="refCtl"><input id="ghostToggle" type="checkbox" checked> 修改前</label>
+        <button id="fitBtn" class="tool">适应窗口</button><button id="undoBtn" class="tool">撤销</button><button id="deleteNode" class="tool">删除节点</button></div>
+       <div class="canvasWrap"><svg id="cadSvg" viewBox="0 0 1200 780">
+        <defs><pattern id="grid" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M25 0H0V25" fill="none" stroke="currentColor" stroke-opacity=".08"/></pattern></defs>
+        <rect width="1200" height="780" fill="url(#grid)"/>
+        <g id="referenceLayer"></g><g id="ghostLayer"></g><g id="cadLayer"></g><g id="controlLayer"></g>
+       </svg></div>
+      </div>
+    </div>
+    <div class="nextBar"><button id="backBtn" class="btn">← 上一步</button><span id="nextHint">请检查当前结果</span><button id="nextBtn" class="btn primary">确认，下一步 →</button></div>
+   </div>
+ </main>
+
+ <aside class="inspector">
+   <div class="insTitle">检查与参数</div>
+   <section><label>标定状态</label><div class="quality"><b id="qualityVal">—</b><span id="markerVal">等待处理</span></div></section>
+   <section><label>工件尺寸</label><div class="metrics"><div><span>宽</span><b id="widthVal">—</b></div><div><span>高</span><b id="heightVal">—</b></div></div></section>
+   <section><label>几何拟合 · 设计几何优先</label><div class="profileRow">
+      <button class="mini profile" data-tol="4">细节保留</button>
+      <button class="mini profile active" data-tol="10">标准</button>
+      <button class="mini profile" data-tol="12">版型规整</button>
+    </div>
+    <div class="regularizeRow"><label><input id="regularizeToggle" type="checkbox"> 设计几何规则化</label><span>平行 / 正交 / 半径归一</span></div>
+    <div class="fitCtl"><span>容差</span><input id="fitTolerance" type="number" min=".3" max="15" step=".5" value="10.0"><em>mm</em><button id="refitBtn" class="mini" disabled>重新拟合</button></div>
+    <div class="entities"><span>LINE <b id="lineCount">—</b></span><span>ARC <b id="arcCount">—</b></span><span>CIRCLE <b id="circleCount">—</b></span><span>SLOT <b id="slotCount">—</b></span></div></section>
+   <section><label>导出检查</label><div class="checks"><div><span>轮廓闭合</span><b id="checkClosed">○</b></div><div><span>标定有效</span><b id="checkCal">○</b></div><div><span>CAD 几何</span><b id="checkCad">○</b></div><div><span>单位</span><b>mm</b></div></div></section>
+   <section class="entityProp"><label>选中实体</label><div id="entityInfo" class="muted">点击 CAD 实体查看属性；双击尺寸标注可直接修改。</div>
+<div id="entityEditHint" class="editHint">CAD 中：直线标注长度/角度；圆弧标注 R 半径；圆标注 Ø 直径。</div></section>
+ </aside>
+</div></div>
+<div id="toast" class="toast"></div>
+<script src="{{ url_for('static', filename='app.js') }}"></script></body></html>
