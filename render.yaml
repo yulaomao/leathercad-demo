@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: leathercad-demo
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements-cloud.txt
+    startCommand: gunicorn -w 1 -k gthread --threads 4 --timeout 180 -b 0.0.0.0:$PORT app:app
+    healthCheckPath: /healthz
+    envVars:
+      - key: LEATHERCAD_WORKDIR
+        value: /tmp/leathercad_workspace
+      - key: PYTHONUNBUFFERED
+        value: "1"

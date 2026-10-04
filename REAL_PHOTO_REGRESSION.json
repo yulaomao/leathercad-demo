@@ -1,0 +1,45 @@
+{
+  "method": "3 supplied real photos; source-photo brightness/darkness/contrast/blur perturbations; injected disconnected false-positive click-delete test",
+  "results": [
+    {
+      "file": "1000048864.jpg",
+      "aruco": "16/16",
+      "photometric_iou": [
+        0.999,
+        0.999,
+        0.999,
+        0.273
+      ],
+      "mean": 0.818,
+      "click_false_removed": 1.0,
+      "target_retained": 1.0
+    },
+    {
+      "file": "1000048862.jpg",
+      "aruco": "16/16",
+      "photometric_iou": [
+        1.0,
+        0.969,
+        0.971,
+        0.612
+      ],
+      "mean": 0.888,
+      "click_false_removed": 1.0,
+      "target_retained": 1.0
+    },
+    {
+      "file": "1000048860.jpg",
+      "aruco": "16/16",
+      "photometric_iou": [
+        1.0,
+        0.976,
+        0.976,
+        0.844
+      ],
+      "mean": 0.949,
+      "click_false_removed": 1.0,
+      "target_retained": 1.0
+    }
+  ],
+  "finding": "Brightness/darkness/contrast are stable. Blur is the main remaining weak case, especially the beige/orange textured parts; controlled focus and contrast are recommended."
+}

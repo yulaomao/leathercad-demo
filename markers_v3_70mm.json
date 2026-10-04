@@ -1,0 +1,186 @@
+{
+  "version": "v3_70mm",
+  "dictionary": "DICT_4X4_50",
+  "paper": {
+    "name": "A4",
+    "width_mm": 210.0,
+    "height_mm": 297.0
+  },
+  "marker_size_mm": 70.0,
+  "print_scale": "100% / Actual Size",
+  "verification_line_mm": 180.0,
+  "sheets": [
+    {
+      "sheet": 1,
+      "ids": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "markers": [
+        {
+          "id": 1,
+          "top_left_mm_from_A4_top_left": [
+            10.0,
+            15.0
+          ],
+          "size_mm": 70.0
+        },
+        {
+          "id": 2,
+          "top_left_mm_from_A4_top_left": [
+            130.0,
+            15.0
+          ],
+          "size_mm": 70.0
+        },
+        {
+          "id": 3,
+          "top_left_mm_from_A4_top_left": [
+            10.0,
+            212.0
+          ],
+          "size_mm": 70.0
+        },
+        {
+          "id": 4,
+          "top_left_mm_from_A4_top_left": [
+            130.0,
+            212.0
+          ],
+          "size_mm": 70.0
+        }
+      ]
+    },
+    {
+      "sheet": 2,
+      "ids": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "markers": [
+        {
+          "id": 5,
+          "top_left_mm_from_A4_top_left": [
+            10.0,
+            15.0
+          ],
+          "size_mm": 70.0
+        },
+        {
+          "id": 6,
+          "top_left_mm_from_A4_top_left": [
+            130.0,
+            15.0
+          ],
+          "size_mm": 70.0
+        },
+        {
+          "id": 7,
+          "top_left_mm_from_A4_top_left": [
+            10.0,
+            212.0
+          ],
+          "size_mm": 70.0
+        },
+        {
+          "id": 8,
+          "top_left_mm_from_A4_top_left": [
+            130.0,
+            212.0
+          ],
+          "size_mm": 70.0
+        }
+      ]
+    },
+    {
+      "sheet": 3,
+      "ids": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "markers": [
+        {
+          "id": 9,
+          "top_left_mm_from_A4_top_left": [
+            10.0,
+            15.0
+          ],
+          "size_mm": 70.0
+        },
+        {
+          "id": 10,
+          "top_left_mm_from_A4_top_left": [
+            130.0,
+            15.0
+          ],
+          "size_mm": 70.0
+        },
+        {
+          "id": 11,
+          "top_left_mm_from_A4_top_left": [
+            10.0,
+            212.0
+          ],
+          "size_mm": 70.0
+        },
+        {
+          "id": 12,
+          "top_left_mm_from_A4_top_left": [
+            130.0,
+            212.0
+          ],
+          "size_mm": 70.0
+        }
+      ]
+    },
+    {
+      "sheet": 4,
+      "ids": [
+        13,
+        14,
+        15,
+        16
+      ],
+      "markers": [
+        {
+          "id": 13,
+          "top_left_mm_from_A4_top_left": [
+            10.0,
+            15.0
+          ],
+          "size_mm": 70.0
+        },
+        {
+          "id": 14,
+          "top_left_mm_from_A4_top_left": [
+            130.0,
+            15.0
+          ],
+          "size_mm": 70.0
+        },
+        {
+          "id": 15,
+          "top_left_mm_from_A4_top_left": [
+            10.0,
+            212.0
+          ],
+          "size_mm": 70.0
+        },
+        {
+          "id": 16,
+          "top_left_mm_from_A4_top_left": [
+            130.0,
+            212.0
+          ],
+          "size_mm": 70.0
+        }
+      ]
+    }
+  ]
+}
